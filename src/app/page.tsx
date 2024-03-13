@@ -2,24 +2,28 @@
 import { useEffect, useRef } from "react";
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
+
 const social = [
   {
     id: 1,
     imageUrl:
-      "https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwfHx8ZW58MHx8fHx8",
-    link: "",
+      "https://image.lexica.art/full_webp/6eb33523-bef3-4d73-bd4c-4852ca78f913",
+    link: "abraralrawi99@gmail.com",
+    type: "email",
   },
   {
     id: 2,
     imageUrl:
-      "https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D",
-    link: "",
+      "https://th.bing.com/th/id/OIP.rIONbwiwOm_V37ef5VAyDwHaFj?rs=1&pid=ImgDetMain",
+    link: "https://github.com/abrar997",
+    type: "github",
   },
   {
     id: 3,
     imageUrl:
-      "https://images.unsplash.com/photo-1611944212129-29977ae1398c?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-    link: "",
+      "https://th.bing.com/th/id/OIP.3hP93aOo5roAzOy5F6loFwHaEK?rs=1&pid=ImgDetMain",
+    link: "https://www.linkedin.com/in/abrar-muthana-658027205/",
+    type: "linkedin",
   },
 ];
 
@@ -135,9 +139,6 @@ export default function Home() {
 
     const groundTexture = new BABYLON.StandardMaterial("ground");
     ground.material = groundTexture;
-    // groundTexture.diffuseColor = BABYLON.Color3.Black();
-    // groundTexture.diffuseColor = BABYLON.Color3.FromHexString("#221a0c");
-    // groundTexture.diffuseColor = BABYLON.Color3.FromHexString("#eee");
     groundTexture.diffuseTexture = new BABYLON.Texture(
       "https://images.unsplash.com/photo-1495195129352-aeb325a55b65?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     );
@@ -159,7 +160,7 @@ export default function Home() {
       "table2.glb",
       scene
     );
-    sofaTable.meshes[0].position = new BABYLON.Vector3(-4, 0, -1);
+    sofaTable.meshes[0].position = new BABYLON.Vector3(-4, 0, -0.5);
     sofaTable.meshes[0].position.y = -2;
     sofaTable.meshes[0].scaling = new BABYLON.Vector3(2.8, 2, 2);
 
@@ -169,20 +170,40 @@ export default function Home() {
       "plantSofa.glb",
       scene
     );
-    plantSofaTable.meshes[0].position = new BABYLON.Vector3(-4, -0.5, -4.1);
-    // plantSofaTable.meshes[0].position.y = -4;
+    plantSofaTable.meshes[0].position = new BABYLON.Vector3(-4, -0.5, -3.5);
     plantSofaTable.meshes[0].scaling = new BABYLON.Vector3(3.2, 3.3, 3.2);
 
+    const border = new BABYLON.HighlightLayer("", scene);
+    const highlighterColor = BABYLON.Color3.FromHexString("#adff2f");
     const remote = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
       "remote.glb",
       scene
     );
-    remote.meshes[0].position = new BABYLON.Vector3(-3.5, -0.5, -4.1);
+    remote.meshes[0].position = new BABYLON.Vector3(-3.5, -0.5, -3.5);
     remote.meshes[0].rotation = new BABYLON.Vector3(0, 0.4, 0);
-    // remote.meshes[0].position.y = -4;
     remote.meshes[0].scaling = new BABYLON.Vector3(0.002, 0.002, 0.002);
+    const remoteMesh = remote.meshes[0].getChildMeshes()[0] as BABYLON.Mesh;
+    remote.meshes[0].getChildMeshes()[0].actionManager =
+      new BABYLON.ActionManager();
+
+    remote.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPointerOverTrigger,
+        function () {
+          border.addMesh(remoteMesh, highlighterColor);
+        }
+      )
+    );
+    remote.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPointerOutTrigger,
+        function () {
+          border.removeMesh(remoteMesh);
+        }
+      )
+    );
 
     const tvTable = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
@@ -204,18 +225,37 @@ export default function Home() {
     );
     tv.meshes[0].scaling = new BABYLON.Vector3(1, 1, 1);
     tv.meshes[0].rotation = new BABYLON.Vector3(0, 0, 0);
-    tv.meshes[0].position = new BABYLON.Vector3(-4.2, -0.3, -6.5);
+    tv.meshes[0].position = new BABYLON.Vector3(-4.2, -0.4, -6.5);
+    const tvChild = tv.meshes[0].getChildMeshes()[0] as BABYLON.Mesh;
+    tv.meshes[0].getChildMeshes()[0].actionManager =
+      new BABYLON.ActionManager();
+
+    tv.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPointerOverTrigger,
+        function () {
+          border.addMesh(tvChild, highlighterColor);
+        }
+      )
+    );
+    tv.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPointerOutTrigger,
+        function () {
+          border.removeMesh(tvChild);
+        }
+      )
+    );
 
     const resume = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
-      "resume.glb",
+      "book.glb",
       scene
     );
     resume.meshes[0].scaling = new BABYLON.Vector3(22, 22, 22);
     resume.meshes[0].rotation = new BABYLON.Vector3(0, 0.9, 0);
     resume.meshes[0].position = new BABYLON.Vector3(-1.6, -1, -7.4);
-
     const resumeChildren = resume.meshes[0].getChildMeshes();
     resumeChildren.forEach((item, index) => {
       const childTexture = new BABYLON.StandardMaterial(`${index}`);
@@ -230,15 +270,6 @@ export default function Home() {
       }
     });
 
-    const plant = await BABYLON.SceneLoader.ImportMeshAsync(
-      null,
-      "./Models/",
-      "plant2.glb"
-    );
-    plant.meshes[0].position = new BABYLON.Vector3(7, 0, 7);
-    plant.meshes[0].position.y = -2;
-    plant.meshes[0].scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
-
     const door = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
@@ -246,9 +277,16 @@ export default function Home() {
     );
 
     door.meshes[0].position = new BABYLON.Vector3(-7.9, 2.1, 1.5);
-    // door.meshes[0].rotation = new BABYLON.Vector3(3.2, 3.27, 0);
-    // door.meshes[0].position.y = -2;
     door.meshes[0].scaling = new BABYLON.Vector3(3.6, 3.8, 3.6);
+
+    const shelf = await BABYLON.SceneLoader.ImportMeshAsync(
+      null,
+      "./Models/",
+      "shelf.glb"
+    );
+
+    shelf.meshes[0].position = new BABYLON.Vector3(7.7, 4.4, 0);
+    shelf.meshes[0].rotation = new BABYLON.Vector3(0, 1.6, 0);
 
     const office = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
@@ -285,7 +323,8 @@ export default function Home() {
           const texture = baseTexture as BABYLON.Texture;
           childMaterial.diffuseTexture = texture;
           texture.uScale = -1;
-          childMaterial.emissiveColor = BABYLON.Color3.White();
+          texture.vScale = 1;
+          childMaterial.emissiveColor = BABYLON.Color3.FromHexString("#fdf4ee");
         } else if (index === 3) {
           childMaterial.diffuseColor = BABYLON.Color3.Black();
         }
@@ -304,41 +343,46 @@ export default function Home() {
           officeScreen.meshes[0].rotation = new BABYLON.Vector3(0, 4.2, 0);
         }
 
-        officeScreen.meshes[0].getChildMeshes()[3].actionManager =
+        officeScreen.meshes[0].getChildMeshes()[4].actionManager =
           new BABYLON.ActionManager();
 
-        const image =
-          officeScreen.meshes[0].getChildMeshes()[3] as BABYLON.Mesh;
+        const screenChild =
+          officeScreen.meshes[0].getChildMeshes()[4] as BABYLON.Mesh;
 
         officeScreen.meshes[0]
-          .getChildMeshes()[3]
+          .getChildMeshes()[4]
           .actionManager?.registerAction(
             new BABYLON.ExecuteCodeAction(
               BABYLON.ActionManager.OnPointerOverTrigger,
-              function () {}
+              function () {
+                border.addMesh(screenChild, highlighterColor);
+              }
             )
           );
 
         officeScreen.meshes[0]
-          .getChildMeshes()[3]
+          .getChildMeshes()[4]
           .actionManager?.registerAction(
             new BABYLON.ExecuteCodeAction(
               BABYLON.ActionManager.OnPointerOutTrigger,
-              function () {}
-            )
-          );
-
-        officeScreen.meshes[0]
-          .getChildMeshes()[3]
-          .actionManager?.registerAction(
-            new BABYLON.ExecuteCodeAction(
-              BABYLON.ActionManager.OnPickTrigger,
               function () {
-                window.location.href = item.link;
+                border.removeMesh(screenChild);
               }
             )
           );
       });
+      officeScreen.meshes[0].getChildMeshes()[4].actionManager?.registerAction(
+        new BABYLON.ExecuteCodeAction(
+          BABYLON.ActionManager.OnPickTrigger,
+          function () {
+            if (item.type === "email") {
+              window.location.href = `mailto:${item.link}`;
+            } else {
+              window.location.href = item.link;
+            }
+          }
+        )
+      );
     });
 
     const officeChair = await BABYLON.SceneLoader.ImportMeshAsync(
@@ -362,53 +406,103 @@ export default function Home() {
     imageFrame.meshes[0].rotation = new BABYLON.Vector3(0, 1.6, 0);
     imageFrame.meshes[0].scaling = new BABYLON.Vector3(2, 4.6, 10.5);
     imageFrame.meshes[0].position = new BABYLON.Vector3(0, 4, 7.8);
-    console.log(imageFrame.meshes[0].getChildMeshes());
-
     imageFrame.meshes[0].getChildMeshes().forEach((childMesh, index) => {
       const childMaterial = new BABYLON.StandardMaterial(
         `childMaterial${index}`
       );
       childMesh.material = childMaterial;
       if (index === 3) {
-        const dynamicTexture = new BABYLON.DynamicTexture(
-          "DynamicTexture",
-          { width: 512, height: 256 },
+        childMaterial.emissiveColor = BABYLON.Color3.White();
+        const plane = BABYLON.MeshBuilder.CreatePlane(
+          "plane",
+          { width: 5, height: 3.3 },
           scene
         );
 
-        const font = " bold 50px serif";
-        const backgroundColor = "white";
+        const material = new BABYLON.StandardMaterial("planeMaterial", scene);
+        const texture = new BABYLON.DynamicTexture(
+          "planeTexture",
+          { width: 512, height: 256 },
+          scene
+        );
+        plane.material = material;
+        material.diffuseTexture = texture;
+        material.emissiveColor = BABYLON.Color3.White();
+        material.emissiveTexture = new BABYLON.Texture(
+          "https://images.unsplash.com/photo-1528458909336-e7a0adfed0a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D"
+        );
 
-        const newTextPosition = {
-          y: dynamicTexture.getSize().height / 2 + 20,
-        };
-        dynamicTexture.drawText(
+        const context2D = texture.getContext();
+        context2D.fillStyle = "#fff";
+        context2D.stroke;
+        context2D.strokeStyle = "teal";
+        context2D.strokeRect(2, 3, 4, 5);
+
+        context2D.font = "bold 40px Arial";
+        context2D.fillText(
           "Abrar Muthana Rakea",
-          null,
-          newTextPosition.y,
-          font,
-          "#48240a",
-          backgroundColor,
-          true
+          50,
+          texture.getSize().height / 2
+        );
+        context2D.font = "28px Arial";
+        context2D.fillText(
+          "Frontend developer",
+          130,
+          texture.getSize().height / 2 + 50
+        );
+        texture.update();
+        plane.position = new BABYLON.Vector3(0, 4, 7.75);
+        plane.rotation = new BABYLON.Vector3(0, 0.029, 0);
+        material.backFaceCulling = true;
+
+        plane.actionManager = new BABYLON.ActionManager();
+        plane.actionManager?.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOverTrigger,
+            function () {
+              border.addMesh(plane, highlighterColor);
+            }
+          )
+        );
+        plane.actionManager?.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOutTrigger,
+            function () {
+              border.removeMesh(plane);
+            }
+          )
         );
 
-        const plane = BABYLON.CreatePlane("", { width: 5, height: 3.3 });
-        const planeMaterial = new BABYLON.StandardMaterial("");
-        plane.material = planeMaterial;
-        plane.position = new BABYLON.Vector3(0, 4, 7.75);
-        plane.rotation = new BABYLON.Vector3(0, 0.03, 0);
-        planeMaterial.diffuseTexture = dynamicTexture;
-        childMaterial.emissiveColor = BABYLON.Color3.Gray();
-        planeMaterial.emissiveColor = BABYLON.Color3.Gray();
-        plane.receiveShadows = true;
-        childMaterial.backFaceCulling = false;
-      } else if (index === 0) {
-        childMaterial.diffuseTexture = new BABYLON.Texture(
-          "https://images.unsplash.com/photo-1602223878762-aff830f9e307?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        plane.actionManager?.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPickTrigger,
+            function () {
+              const fileUrl = "./pdf/resume.pdf";
+              const fileName = "resume.pdf";
+              const link = document.createElement("a");
+              link.href = fileUrl;
+              link.download = fileName;
+              link.click();
+            }
+          )
         );
-        childMaterial.emissiveColor = BABYLON.Color3.Black();
+      } else if (index === 0) {
+        childMaterial.diffuseTexture = new BABYLON.Texture("./images/w.png");
+        childMaterial.emissiveColor = BABYLON.Color3.White();
       }
     });
+
+    imageFrame.meshes[0].getChildMeshes()[0].actionManager =
+      new BABYLON.ActionManager();
+
+    const plant = await BABYLON.SceneLoader.ImportMeshAsync(
+      null,
+      "./Models/",
+      "plant2.glb"
+    );
+    plant.meshes[0].position = new BABYLON.Vector3(6.5, 0, 7);
+    plant.meshes[0].position.y = -2;
+    plant.meshes[0].scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
 
     scene.collisionsEnabled = true;
     return scene;
@@ -416,7 +510,7 @@ export default function Home() {
 
   return (
     <div>
-      <canvas ref={canvasRef} className="h-full w-full outline-none" />
+      <canvas ref={canvasRef} className="h-screen w-full outline-none" />
     </div>
   );
 }
