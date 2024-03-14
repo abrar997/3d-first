@@ -295,7 +295,7 @@ export default function Home() {
       scene
     );
     office.meshes[0].scaling = new BABYLON.Vector3(0.03, 0.03, 0.03);
-    office.meshes[0].rotation = new BABYLON.Vector3(0, -7.9, 0);
+    office.meshes[0].rotation = new BABYLON.Vector3(0, -7.87, 0);
     office.meshes[0].position = new BABYLON.Vector3(7.7, 0, -5);
     office.meshes[0].position.y = -2;
 
@@ -314,7 +314,6 @@ export default function Home() {
           `childMaterial${index}`
         );
         childMesh.material = childMaterial;
-        console.log("office", officeScreen.meshes[0].getChildMeshes());
 
         if (index === 0) {
           childMaterial.diffuseColor = BABYLON.Color3.Black();
@@ -487,8 +486,8 @@ export default function Home() {
           )
         );
       } else if (index === 0) {
-        childMaterial.diffuseTexture = new BABYLON.Texture("./images/w.png");
-        childMaterial.emissiveColor = BABYLON.Color3.White();
+        childMaterial.emissiveTexture = new BABYLON.Texture("./images/w.png");
+        childMaterial.diffuseColor = BABYLON.Color3.Black();
       }
     });
 
