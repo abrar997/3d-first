@@ -51,7 +51,7 @@ export default function Home() {
     };
   }, [canvasRef, social, engineRef.current]);
 
-  const createScene = async function () {
+  const createScene = async () => {
     const engine = engineRef.current;
     if (!engine) return null;
     const scene = new BABYLON.Scene(engine);
@@ -65,12 +65,12 @@ export default function Home() {
     light.intensity = 0.8;
     const camera = new BABYLON.UniversalCamera(
       "",
-      new BABYLON.Vector3(2, 4, -5),
+      new BABYLON.Vector3(2, 2.5, -5),
       scene
     );
     camera.rotation = new BABYLON.Vector3(0, 0, 0);
     camera.checkCollisions = true;
-    camera.speed = 0.3;
+    camera.speed = 0.7;
     camera.minZ = 0.01;
     camera.keysUp.push(87);
     camera.keysDown.push(83);
@@ -83,7 +83,7 @@ export default function Home() {
     scene.gravity.y = -0.08;
     //camera border
     const x = 14;
-    const y = 14;
+    const y = 12;
     const z = 14;
 
     function clampCameraPosition() {
@@ -508,7 +508,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="relative">
       <canvas ref={canvasRef} className="h-screen w-full outline-none" />
     </div>
   );
