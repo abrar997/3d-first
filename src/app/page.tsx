@@ -3,6 +3,30 @@ import { useEffect, useRef, useState } from "react";
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import styled, { keyframes } from "styled-components";
+
+const gallery = [
+  {
+    id: 1,
+    imageUrL: "./Images/tech.png",
+    path: "https://www.accommodation.network/",
+  },
+  {
+    id: 2,
+    imageUrL: "./Images/admin.png",
+    path: "https://funny-maamoul-5e654c.netlify.app/",
+  },
+  {
+    id: 3,
+    imageUrL: "./Images/market.png",
+    path: "https://sweet-praline-474c1a.netlify.app/#home",
+  },
+  {
+    id: 4,
+    imageUrL: "./Images/insta.png",
+    path: "https://superb-horse-ab8e11.netlify.app/",
+  },
+];
+
 const social = [
   {
     id: 1,
@@ -26,6 +50,7 @@ const social = [
     type: "linkedin",
   },
 ];
+
 const largeMoveAnimation = keyframes`
 0% {
   transform: translateY(0px) translateX(0px); 
@@ -112,10 +137,9 @@ export default function Home() {
     light.intensity = 0.8;
     const camera = new BABYLON.UniversalCamera(
       "",
-      new BABYLON.Vector3(0, 0, -5),
+      new BABYLON.Vector3(4, 4, 5.8),
       scene
     );
-    camera.rotation = new BABYLON.Vector3(0, 0, 0);
     camera.checkCollisions = true;
     camera.speed = 0.7;
     camera.minZ = 0.01;
@@ -126,11 +150,11 @@ export default function Home() {
     camera.keysUpward.push(32);
     const cameraCanvas = scene.getEngine().getRenderingCanvas(); //connect camera with engine and canvas and scene
     camera.attachControl(cameraCanvas, true); // who control camera direction
-    camera.setTarget(BABYLON.Vector3.Zero()); // camera should looks for
+    camera.setTarget(new BABYLON.Vector3(2, 3.5, 4)); // camera should looks for
     scene.gravity.y = -0.08;
     //camera border
     const x = 14;
-    const y = 12;
+    const y = -8;
     const z = 14;
 
     function clampCameraPosition() {
@@ -316,6 +340,25 @@ export default function Home() {
         childTexture.diffuseColor = BABYLON.Color3.Black();
       }
     });
+
+    const light1 = await BABYLON.SceneLoader.ImportMeshAsync(
+      null,
+      "./Models/",
+      "light.glb"
+    );
+
+    light1.meshes[0].position = new BABYLON.Vector3(-4, 4.6, -9.4);
+    light1.meshes[0].rotation = new BABYLON.Vector3(0, 0, 0);
+    light1.meshes[0].scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
+    const light2 = await BABYLON.SceneLoader.ImportMeshAsync(
+      null,
+      "./Models/",
+      "light.glb"
+    );
+
+    light2.meshes[0].position = new BABYLON.Vector3(6, 4.6, -9.4);
+    light2.meshes[0].rotation = new BABYLON.Vector3(0, 0, 0);
+    light2.meshes[0].scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
 
     const door = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
@@ -549,13 +592,83 @@ export default function Home() {
     plant.meshes[0].position = new BABYLON.Vector3(6.5, 0, 7);
     plant.meshes[0].position.y = -2;
     plant.meshes[0].scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
+    gallery.map(async (item, index) => {
+      // wall door frames
+      const smallFrames = await BABYLON.SceneLoader.ImportMeshAsync(
+        null,
+        "./Models/",
+        "frame2.glb"
+      );
+      console.log(smallFrames.meshes[0].getChildMeshes());
+
+      smallFrames.meshes[0].position = new BABYLON.Vector3(-4.9, 3.1, 4.5);
+      smallFrames.meshes[0].rotation = new BABYLON.Vector3(0, 1.55, 0);
+      smallFrames.meshes[0].scaling = new BABYLON.Vector3(3, 2, 2);
+
+      smallFrames.meshes[0].getChildMeshes().forEach((childMesh, index) => {
+        const childMaterial = new BABYLON.StandardMaterial(
+          `childMaterial${index}`
+        );
+        childMesh.material = childMaterial;
+
+        if (index == 3) {
+          const baseTexture = new BABYLON.Texture(item.imageUrL, scene);
+          const texture = baseTexture as BABYLON.Texture;
+          texture.uScale = -1.53;
+          texture.vScale = -1;
+          childMaterial.diffuseTexture = texture;
+          childMaterial.emissiveColor = BABYLON.Color3.White();
+        } else {
+          childMaterial.emissiveColor = BABYLON.Color3.FromHexString("#fdf4ee");
+          childMaterial.diffuseTexture = new BABYLON.Texture("./Images/w.png");
+        }
+      });
+
+      if (index === 0) {
+        smallFrames.meshes[0].position = new BABYLON.Vector3(-7.5, 4.6, -3.9);
+      } else if (index === 1) {
+        smallFrames.meshes[0].position = new BABYLON.Vector3(-7.5, 4.6, -2);
+      } else if (index === 2) {
+        smallFrames.meshes[0].position = new BABYLON.Vector3(-7.5, 2.9, -3.9);
+      } else {
+        smallFrames.meshes[0].position = new BABYLON.Vector3(-7.5, 2.9, -2);
+      }
+      smallFrames.meshes[0].getChildMeshes()[3].actionManager =
+        new BABYLON.ActionManager();
+      const frameMesh =
+        smallFrames.meshes[0].getChildMeshes()[3] as BABYLON.Mesh;
+      smallFrames.meshes[0].getChildMeshes()[3].actionManager?.registerAction(
+        new BABYLON.ExecuteCodeAction(
+          BABYLON.ActionManager.OnPointerOverTrigger,
+          function () {
+            border.addMesh(frameMesh, highlighterColor);
+          }
+        )
+      );
+      smallFrames.meshes[0].getChildMeshes()[3].actionManager?.registerAction(
+        new BABYLON.ExecuteCodeAction(
+          BABYLON.ActionManager.OnPointerOutTrigger,
+          function () {
+            border.removeMesh(frameMesh);
+          }
+        )
+      );
+      smallFrames.meshes[0].getChildMeshes()[3].actionManager?.registerAction(
+        new BABYLON.ExecuteCodeAction(
+          BABYLON.ActionManager.OnPickTrigger,
+          function () {
+            window.location.href = item.path;
+          }
+        )
+      );
+    });
 
     scene.collisionsEnabled = true;
     return scene;
   };
 
   return (
-    <div>
+    <div className="relative bg-[#eee]">
       {loading && (
         <div className="h-screen flex items-center justify-center">
           <div
@@ -566,7 +679,7 @@ export default function Home() {
               background: " linear-gradient(145deg, #e0e0e0, #FFFFFF)",
             }}
           >
-            <div className="bg-gradient-to-br from-[#58754e] to-[#000] lg:w-60 lg:h-64 w-16 h-16 rounded-full rounded-tr-none rounded-bl-none border-[#f1e5d9] relative">
+            <div className="bg-gradient-to-br from-[#58754e] to-[#000] lg:w-60 lg:h-64 w-24 h-20 rounded-full rounded-tr-none rounded-bl-none border-[#f1e5d9] relative">
               <Items2 className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
               <Items className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
             </div>
@@ -575,7 +688,7 @@ export default function Home() {
       )}
       <canvas
         ref={canvasRef}
-        className={`h-screen w-full outline-none ${
+        className={`h-screen w-full outline-none relative ${
           loading ? "hidden" : "flex"
         }`}
       />
