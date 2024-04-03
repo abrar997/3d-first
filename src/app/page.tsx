@@ -141,16 +141,16 @@ export default function Home() {
       scene
     );
     camera.checkCollisions = true;
-    camera.speed = 0.7;
+    camera.speed = 0.6;
     camera.minZ = 0.01;
     camera.keysUp.push(87);
-    camera.keysDown.push(83);
-    camera.keysLeft.push(68);
-    camera.keysRight.push(65);
-    camera.keysUpward.push(32);
+    camera.keysDown.push(13);
+    camera.keysLeft.push(18);
+    camera.keysRight.push(15);
+    camera.keysUpward.push(12);
     const cameraCanvas = scene.getEngine().getRenderingCanvas(); //connect camera with engine and canvas and scene
     camera.attachControl(cameraCanvas, true); // who control camera direction
-    camera.setTarget(new BABYLON.Vector3(2, 3.5, 4)); // camera should looks for
+    camera.setTarget(new BABYLON.Vector3(2, 3.5, 4.2)); // camera should looks for
     scene.gravity.y = -0.08;
     //camera border
     const x = 14;
@@ -297,11 +297,23 @@ export default function Home() {
     tv.meshes[0].scaling = new BABYLON.Vector3(1, 1, 1);
     tv.meshes[0].rotation = new BABYLON.Vector3(0, 0, 0);
     tv.meshes[0].position = new BABYLON.Vector3(-4.2, -0.4, -6.5);
-    const tvChild = tv.meshes[0].getChildMeshes()[0] as BABYLON.Mesh;
-    tv.meshes[0].getChildMeshes()[0].actionManager =
-      new BABYLON.ActionManager();
+    const planeTv = BABYLON.MeshBuilder.CreatePlane(
+      "",
+      { size: 3.2, height: 1.5 },
+      scene
+    );
+    planeTv.position = new BABYLON.Vector3(-4.15, 1.05, -6.4);
+    const planeMaterial = new BABYLON.StandardMaterial("");
+    planeTv.material = planeMaterial;
+    planeMaterial.backFaceCulling = false;
+    const video = new BABYLON.VideoTexture("", "./videos/video.mp4", scene);
+    planeMaterial.diffuseTexture = video;
+    planeMaterial.emissiveColor = BABYLON.Color3.White();
 
-    tv.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+    const tvChild = planeTv as BABYLON.Mesh;
+    planeTv.actionManager = new BABYLON.ActionManager();
+
+    planeTv.actionManager?.registerAction(
       new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPointerOverTrigger,
         function () {
@@ -309,7 +321,7 @@ export default function Home() {
         }
       )
     );
-    tv.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+    planeTv.actionManager?.registerAction(
       new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPointerOutTrigger,
         function () {
