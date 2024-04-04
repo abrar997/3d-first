@@ -3,6 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import styled, { keyframes } from "styled-components";
+import {
+  IoMdArrowDropleft,
+  IoMdArrowDropright,
+  IoMdArrowDropup,
+} from "react-icons/io";
+import { MdOutlineArrowDropDown, MdTouchApp } from "react-icons/md";
+import { PiMouseSimpleFill } from "react-icons/pi";
 
 const gallery = [
   {
@@ -52,37 +59,37 @@ const social = [
 ];
 
 const largeMoveAnimation = keyframes`
-0% {
-  transform: translateY(0px) translateX(0px); 
-}
-100% {
-  transform: translateY(199px) translateX(199px); 
-}
+  0% {
+    transform: translateY(0px) translateX(0px); 
+  }
+  100% {
+    transform: translateY(199px) translateX(199px); 
+  }
 `;
 const largeMoveAnimation2 = keyframes`
-0% {
-  transform: translateY(199px) translateX(199px) 
-}
-100% {
-  transform: translateY(0px) translateX(0px); 
-}
+  0% {
+    transform: translateY(199px) translateX(199px) 
+  }
+  100% {
+    transform: translateY(0px) translateX(0px); 
+  }
 `;
 
 const smallMoveAnimation = keyframes`
-0% {
-  transform: translateY(0px) translateX(0px); 
-}
-100% {
-  transform: translateY(180%) translateX(180%); 
-}
+  0% {
+    transform: translateY(0px) translateX(0px); 
+  }
+  100% {
+    transform: translateY(180%) translateX(180%); 
+  }
 `;
 const smallMoveAnimation2 = keyframes`
-0% {
-  transform: translateY(180%) translateX(180%) 
-}
-100% {
-  transform: translateY(0px) translateX(0px); 
-}
+  0% {
+    transform: translateY(180%) translateX(180%) 
+  }
+  100% {
+    transform: translateY(0px) translateX(0px); 
+  }
 `;
 
 const Items = styled.div`
@@ -150,7 +157,7 @@ export default function Home() {
     camera.keysUpward.push(12);
     const cameraCanvas = scene.getEngine().getRenderingCanvas(); //connect camera with engine and canvas and scene
     camera.attachControl(cameraCanvas, true); // who control camera direction
-    camera.setTarget(new BABYLON.Vector3(2, 3.5, 4.2)); // camera should looks for
+    camera.setTarget(new BABYLON.Vector3(2, 3.2, 3.3)); // camera should looks for
     scene.gravity.y = -0.08;
     //camera border
     const x = 14;
@@ -245,7 +252,8 @@ export default function Home() {
     plantSofaTable.meshes[0].scaling = new BABYLON.Vector3(3.2, 3.3, 3.2);
 
     const border = new BABYLON.HighlightLayer("", scene);
-    const highlighterColor = BABYLON.Color3.FromHexString("#adff2f");
+    const highlighterColor = BABYLON.Color3.Green();
+
     const remote = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
@@ -272,6 +280,18 @@ export default function Home() {
         BABYLON.ActionManager.OnPointerOutTrigger,
         function () {
           border.removeMesh(remoteMesh);
+        }
+      )
+    );
+    remote.meshes[0].getChildMeshes()[0].actionManager?.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger,
+        function () {
+          if (video.video.paused) {
+            video.video.play();
+          } else {
+            video.video.pause();
+          }
         }
       )
     );
@@ -309,26 +329,6 @@ export default function Home() {
     const video = new BABYLON.VideoTexture("", "./videos/video.mp4", scene);
     planeMaterial.diffuseTexture = video;
     planeMaterial.emissiveColor = BABYLON.Color3.White();
-
-    const tvChild = planeTv as BABYLON.Mesh;
-    planeTv.actionManager = new BABYLON.ActionManager();
-
-    planeTv.actionManager?.registerAction(
-      new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPointerOverTrigger,
-        function () {
-          border.addMesh(tvChild, highlighterColor);
-        }
-      )
-    );
-    planeTv.actionManager?.registerAction(
-      new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPointerOutTrigger,
-        function () {
-          border.removeMesh(tvChild);
-        }
-      )
-    );
 
     const resume = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
@@ -698,12 +698,46 @@ export default function Home() {
           </div>
         </div>
       )}
-      <canvas
-        ref={canvasRef}
-        className={`h-screen w-full outline-none relative ${
-          loading ? "hidden" : "flex"
-        }`}
-      />
+      <div>
+        <canvas
+          ref={canvasRef}
+          className={`h-screen w-full outline-none relative ${
+            loading ? "hidden" : "flex"
+          }`}
+        />
+        <div
+          className={`absolute bottom-3 left-3 lg:left-11 gap-4 items-end uppercase ${
+            loading ? "hidden" : "flex"
+          }`}
+        >
+          <div className="hidden lg:flex flex-col gap-1 items-center">
+            <div className="bg-[#83807F] text-[12px] text-white">
+              <IoMdArrowDropup />
+            </div>
+            <div className="flex gap-1">
+              <div className="bg-[#83807F] text-[12px] text-white">
+                <IoMdArrowDropleft />
+              </div>
+              <div className="bg-[#83807F] text-[12px] text-white">
+                <MdOutlineArrowDropDown />
+              </div>
+              <div className="bg-[#83807F] text-[12px] text-white">
+                <IoMdArrowDropright />
+              </div>
+            </div>
+            <p className="text-[8px] text-[#83807F]">camera controller</p>
+          </div>
+          <div className="flex flex-col gap-1 items-center">
+            <div className="text-[26px] text-slate-50 lg:text-[#83807F]">
+              <PiMouseSimpleFill className="hidden lg:flex" />
+              <MdTouchApp className="lg:hidden" />
+            </div>
+            <p className="text-[8px] text-slate-50 lg:text-[#83807F]">
+              drag camera
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
