@@ -85,7 +85,7 @@ const smallMoveAnimation = keyframes`
 `;
 const smallMoveAnimation2 = keyframes`
   0% {
-    transform: translateY(180%) translateX(180%) 
+    transform: translateY(190%) translateX(190%) 
   }
   100% {
     transform: translateY(0px) translateX(0px); 
@@ -95,13 +95,13 @@ const smallMoveAnimation2 = keyframes`
 const Items = styled.div`
   animation: ${largeMoveAnimation} 1s ease-in-out infinite alternate;
   @media (max-width: 768px) {
-    animation: ${smallMoveAnimation} 1s ease-in-out infinite alternate;
+    animation: ${smallMoveAnimation} 0.5s ease-in-out infinite alternate;
   }
 `;
 const Items2 = styled.div`
   animation: ${largeMoveAnimation2} 1s ease-in-out infinite alternate;
   @media (max-width: 768px) {
-    animation: ${smallMoveAnimation2} 1s ease-in-out infinite alternate;
+    animation: ${smallMoveAnimation2} 0.5s ease-in-out infinite alternate;
   }
 `;
 
@@ -322,13 +322,15 @@ export default function Home() {
       { size: 3.2, height: 1.5 },
       scene
     );
-    planeTv.position = new BABYLON.Vector3(-4.15, 1.05, -6.4);
+    planeTv.rotation = new BABYLON.Vector3(0, 3.15, 0);
+    planeTv.position = new BABYLON.Vector3(-4.15, 1.05, -6.42);
     const planeMaterial = new BABYLON.StandardMaterial("");
     planeTv.material = planeMaterial;
     planeMaterial.backFaceCulling = false;
     const video = new BABYLON.VideoTexture("", "./videos/video.mp4", scene);
     planeMaterial.diffuseTexture = video;
     planeMaterial.emissiveColor = BABYLON.Color3.White();
+    video.video.muted = true;
 
     const resume = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
@@ -611,8 +613,6 @@ export default function Home() {
         "./Models/",
         "frame2.glb"
       );
-      console.log(smallFrames.meshes[0].getChildMeshes());
-
       smallFrames.meshes[0].position = new BABYLON.Vector3(-4.9, 3.1, 4.5);
       smallFrames.meshes[0].rotation = new BABYLON.Vector3(0, 1.55, 0);
       smallFrames.meshes[0].scaling = new BABYLON.Vector3(3, 2, 2);
@@ -680,25 +680,25 @@ export default function Home() {
   };
 
   return (
-    <div className="relative bg-[#eee]">
+    <div className="bg-[#eee]">
       {loading && (
         <div className="h-screen flex items-center justify-center">
           <div
-            className="shadow-xl border w-[70%] h-[70%] lg:w-96 lg:h-96 rounded-full flex items-center justify-center relative"
+            className="shadow-xl border w-[80%] h-[80%] lg:w-96 lg:h-96 rounded-full flex items-center justify-center relative"
             style={{
               boxShadow:
                 "6.61px 6.61px 20px #BABBBE, -6.61px -6.61px 20px #FFFFFF",
               background: " linear-gradient(145deg, #e0e0e0, #FFFFFF)",
             }}
           >
-            <div className="bg-gradient-to-br from-[#58754e] to-[#000] lg:w-60 lg:h-64 w-24 h-20 rounded-full rounded-tr-none rounded-bl-none border-[#f1e5d9] relative">
+            <div className="bg-gradient-to-br from-[#58754e] to-[#000] lg:w-60 lg:h-64 w-20 h-16 rounded-full rounded-tr-none rounded-bl-none border-[#f1e5d9] relative">
               <Items2 className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
               <Items className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
             </div>
           </div>
         </div>
       )}
-      <div>
+      <div className="relative">
         <canvas
           ref={canvasRef}
           className={`h-screen w-full outline-none relative ${
@@ -728,11 +728,11 @@ export default function Home() {
             <p className="text-[8px] text-[#83807F]">camera controller</p>
           </div>
           <div className="flex flex-col gap-1 items-center">
-            <div className="text-[26px] text-slate-50 lg:text-[#83807F]">
+            <div className="text-[26px] text-slate-100 lg:text-[#83807F]">
               <PiMouseSimpleFill className="hidden lg:flex" />
               <MdTouchApp className="lg:hidden" />
             </div>
-            <p className="text-[8px] text-slate-50 lg:text-[#83807F]">
+            <p className="text-[8px] text-slate-100 lg:text-[#83807F]">
               drag camera
             </p>
           </div>
