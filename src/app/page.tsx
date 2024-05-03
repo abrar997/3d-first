@@ -14,13 +14,13 @@ import { PiMouseSimpleFill } from "react-icons/pi";
 const gallery = [
   {
     id: 1,
-    imageUrL: "./Images/tech.png",
-    path: "https://www.accommodation.network/",
+    imageUrL: "./Images/FA.png",
+    path: "https://3d-project2.vercel.app/",
   },
   {
     id: 2,
-    imageUrL: "./Images/admin.png",
-    path: "https://funny-maamoul-5e654c.netlify.app/",
+    imageUrL: "./Images/tech.png",
+    path: "https://www.accommodation.network/",
   },
   {
     id: 3,
@@ -29,8 +29,8 @@ const gallery = [
   },
   {
     id: 4,
-    imageUrL: "./Images/insta.png",
-    path: "https://superb-horse-ab8e11.netlify.app/",
+    imageUrL: "./Images/admin.png",
+    path: "https://funny-maamoul-5e654c.netlify.app/",
   },
 ];
 
