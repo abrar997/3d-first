@@ -178,7 +178,7 @@ export default function Home() {
       clampCameraPosition();
     });
 
-    const room = BABYLON.MeshBuilder.CreateBox(
+    const room = await BABYLON.MeshBuilder.CreateBox(
       "",
       {
         size: 16,
@@ -681,7 +681,7 @@ export default function Home() {
 
   return (
     <div className="bg-[#eee]">
-      {loading && (
+      {/* {loading && (
         <div className="h-screen flex items-center justify-center">
           <div
             className="shadow-xl border w-[80%] h-[80%] lg:w-96 lg:h-96 rounded-full flex items-center justify-center relative"
@@ -697,19 +697,23 @@ export default function Home() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       <div className="relative">
         <canvas
           ref={canvasRef}
-          className={`h-screen w-full outline-none relative ${
-            loading ? "hidden" : "flex"
-          }`}
+          className={`h-screen w-full outline-none relative 
+          `}
         />
+        {/* ${
+           // loading ? "hidden" : "flex"
+         } */}
         <div
-          className={`absolute bottom-3 left-3 lg:left-11 gap-4 items-end uppercase ${
-            loading ? "hidden" : "flex"
-          }`}
+          className={`absolute bottom-3 flex left-3 lg:left-11 gap-4 items-end uppercase
+          `}
         >
+          {/* ${
+           loading ? "hidden" : "flex"
+         } */}
           <div className="hidden lg:flex flex-col gap-1 items-center">
             <div className="bg-[#83807F] text-[12px] text-white">
               <IoMdArrowDropup />

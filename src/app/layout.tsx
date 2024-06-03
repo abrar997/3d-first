@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   title: "Abrar Muthana Rakea",
   description: "Portfolio",
   icons: "me.jpg",
-  assets: "me.jpg",
 };
 
 export default function RootLayout({
