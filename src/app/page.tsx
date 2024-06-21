@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
-import styled, { keyframes } from "styled-components";
 import {
   IoMdArrowDropleft,
   IoMdArrowDropright,
@@ -10,6 +9,7 @@ import {
 } from "react-icons/io";
 import { MdOutlineArrowDropDown, MdTouchApp } from "react-icons/md";
 import { PiMouseSimpleFill } from "react-icons/pi";
+import { ClimbingBoxLoader } from "react-spinners";
 
 const gallery = [
   {
@@ -58,64 +58,19 @@ const social = [
   },
 ];
 
-const largeMoveAnimation = keyframes`
-  0% {
-    transform: translateY(0px) translateX(0px); 
-  }
-  100% {
-    transform: translateY(199px) translateX(199px); 
-  }
-`;
-const largeMoveAnimation2 = keyframes`
-  0% {
-    transform: translateY(199px) translateX(199px) 
-  }
-  100% {
-    transform: translateY(0px) translateX(0px); 
-  }
-`;
-
-const smallMoveAnimation = keyframes`
-  0% {
-    transform: translateY(0px) translateX(0px); 
-  }
-  100% {
-    transform: translateY(180%) translateX(180%); 
-  }
-`;
-const smallMoveAnimation2 = keyframes`
-  0% {
-    transform: translateY(190%) translateX(190%) 
-  }
-  100% {
-    transform: translateY(0px) translateX(0px); 
-  }
-`;
-
-const Items = styled.div`
-  animation: ${largeMoveAnimation} 1s ease-in-out infinite alternate;
-  @media (max-width: 768px) {
-    animation: ${smallMoveAnimation} 0.5s ease-in-out infinite alternate;
-  }
-`;
-const Items2 = styled.div`
-  animation: ${largeMoveAnimation2} 1s ease-in-out infinite alternate;
-  @media (max-width: 768px) {
-    animation: ${smallMoveAnimation2} 0.5s ease-in-out infinite alternate;
-  }
-`;
-
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null); // space to render action
   const sceneRef = useRef<BABYLON.Scene | null>(null); // action
   const engineRef = useRef<BABYLON.Engine | null>(null); //engine for action
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    let isMounted = true;
     async function renderSceneFunction() {
       if (canvasRef.current) {
         engineRef.current = new BABYLON.Engine(canvasRef.current);
         sceneRef.current = await createScene();
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
 
       engineRef.current?.runRenderLoop(() => {
@@ -124,11 +79,12 @@ export default function Home() {
     }
 
     renderSceneFunction();
-
+    setLoading(false);
     return () => {
+      isMounted = false;
       if (engineRef.current) engineRef.current.dispose();
     };
-  }, [canvasRef, social, engineRef.current]);
+  }, [canvasRef]);
 
   const createScene = async () => {
     const engine = engineRef.current;
@@ -178,7 +134,7 @@ export default function Home() {
       clampCameraPosition();
     });
 
-    const room = await BABYLON.MeshBuilder.CreateBox(
+    const room = BABYLON.MeshBuilder.CreateBox(
       "",
       {
         size: 16,
@@ -226,7 +182,7 @@ export default function Home() {
     const sofa = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
-      "sofa2.glb",
+      "sofa.glb",
       scene
     );
     sofa.meshes[0].scaling = new BABYLON.Vector3(3.5, 5.2, 3.2);
@@ -235,7 +191,7 @@ export default function Home() {
     const sofaTable = await BABYLON.SceneLoader.ImportMeshAsync(
       null,
       "./Models/",
-      "table2.glb",
+      "table.glb",
       scene
     );
     sofaTable.meshes[0].position = new BABYLON.Vector3(-4, 0, -0.5);
@@ -680,40 +636,18 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#eee]">
-      {/* {loading && (
-        <div className="h-screen flex items-center justify-center">
-          <div
-            className="shadow-xl border w-[80%] h-[80%] lg:w-96 lg:h-96 rounded-full flex items-center justify-center relative"
-            style={{
-              boxShadow:
-                "6.61px 6.61px 20px #BABBBE, -6.61px -6.61px 20px #FFFFFF",
-              background: " linear-gradient(145deg, #e0e0e0, #FFFFFF)",
-            }}
-          >
-            <div className="bg-gradient-to-br from-[#58754e] to-[#000] lg:w-60 lg:h-64 w-20 h-16 rounded-full rounded-tr-none rounded-bl-none border-[#f1e5d9] relative">
-              <Items2 className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
-              <Items className="bg-[#f1e5d9] rounded-full w-6 h-6 lg:w-10 lg:h-10 border-4 lg:border-8 border-[#a96f36] border-l-[#9a6f43] border-b-[#9a6f43] shadow-xl absolute inset-0 transition-all duration-300 translate-x-6" />
-            </div>
-          </div>
+    <div className="h-screen lg:h-[100vh]">
+      {loading && (
+        <div className="flex bg-[#eee] items-center justify-center h-full">
+          <ClimbingBoxLoader color="green" size={40} />
         </div>
-      )} */}
+      )}
       <div className="relative">
         <canvas
           ref={canvasRef}
-          className={`h-screen w-full outline-none relative 
-          `}
+          className="h-full w-full outline-none relative"
         />
-        {/* ${
-           // loading ? "hidden" : "flex"
-         } */}
-        <div
-          className={`absolute bottom-3 flex left-3 lg:left-11 gap-4 items-end uppercase
-          `}
-        >
-          {/* ${
-           loading ? "hidden" : "flex"
-         } */}
+        <div className="absolute bottom-3 flex left-3 lg:left-11 gap-4 items-end uppercase">
           <div className="hidden lg:flex flex-col gap-1 items-center">
             <div className="bg-[#83807F] text-[12px] text-white">
               <IoMdArrowDropup />
