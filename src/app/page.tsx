@@ -9,7 +9,6 @@ import {
 } from "react-icons/io";
 import { MdOutlineArrowDropDown, MdTouchApp } from "react-icons/md";
 import { PiMouseSimpleFill } from "react-icons/pi";
-import { ClimbingBoxLoader } from "react-spinners";
 
 const gallery = [
   {
@@ -62,15 +61,12 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null); // space to render action
   const sceneRef = useRef<BABYLON.Scene | null>(null); // action
   const engineRef = useRef<BABYLON.Engine | null>(null); //engine for action
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
     async function renderSceneFunction() {
       if (canvasRef.current) {
         engineRef.current = new BABYLON.Engine(canvasRef.current);
         sceneRef.current = await createScene();
-        if (isMounted) setLoading(false);
       }
 
       engineRef.current?.runRenderLoop(() => {
@@ -79,12 +75,10 @@ export default function Home() {
     }
 
     renderSceneFunction();
-    setLoading(false);
     return () => {
-      isMounted = false;
       if (engineRef.current) engineRef.current.dispose();
     };
-  }, [canvasRef]);
+  }, [canvasRef, social, engineRef.current]);
 
   const createScene = async () => {
     const engine = engineRef.current;
@@ -98,7 +92,7 @@ export default function Home() {
     );
     light.specular = BABYLON.Color3.FromHexString("#46230a");
     light.intensity = 0.8;
-    const camera = new BABYLON.UniversalCamera(
+    const camera = new BABYLON.DeviceOrientationCamera(
       "",
       new BABYLON.Vector3(4, 4, 5.8),
       scene
@@ -636,16 +630,11 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen lg:h-[100vh]">
-      {loading && (
-        <div className="flex bg-[#eee] items-center justify-center h-full">
-          <ClimbingBoxLoader color="green" size={40} />
-        </div>
-      )}
+    <div>
       <div className="relative">
         <canvas
           ref={canvasRef}
-          className="h-full w-full outline-none relative"
+          className="h-screen w-full outline-none relative"
         />
         <div className="absolute bottom-3 flex left-3 lg:left-11 gap-4 items-end uppercase">
           <div className="hidden lg:flex flex-col gap-1 items-center">
