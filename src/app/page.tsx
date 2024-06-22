@@ -120,6 +120,7 @@ export default function Home() {
       scene
     );
     FreeCamera.attachControl(scene);
+    FreeCamera.setTarget(new BABYLON.Vector3(2, 3.2, 3.3)); // camera should looks for
 
     function clampCameraPosition() {
       const cameraPosition = camera.position;
