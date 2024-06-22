@@ -92,7 +92,30 @@ export default function Home() {
     );
     light.specular = BABYLON.Color3.FromHexString("#46230a");
     light.intensity = 0.8;
-    const camera = new BABYLON.DeviceOrientationCamera(
+
+    // const camera = new BABYLON.UniversalCamera(
+    //   "",
+    //   new BABYLON.Vector3(4, 4, 5.8),
+    //   scene
+    // );
+    // camera.checkCollisions = true;
+    // camera.speed = 0.6;
+    // camera.minZ = 0.01;
+    // camera.keysUp.push(87);
+    // camera.keysDown.push(13);
+    // camera.keysLeft.push(18);
+    // camera.keysRight.push(15);
+    // camera.keysUpward.push(12);
+    // const cameraCanvas = scene.getEngine().getRenderingCanvas(); //connect camera with engine and canvas and scene
+    // camera.attachControl(cameraCanvas, true); // who control camera direction
+    // camera.setTarget(new BABYLON.Vector3(2, 3.2, 3.3)); // camera should looks for
+    // scene.gravity.y = -0.08;
+    // //camera border
+    // const x = 14;
+    // const y = -8;
+    // const z = 14;
+
+    const camera = new BABYLON.UniversalCamera(
       "",
       new BABYLON.Vector3(4, 4, 5.8),
       scene
@@ -100,33 +123,32 @@ export default function Home() {
     camera.checkCollisions = true;
     camera.speed = 0.6;
     camera.minZ = 0.01;
-    camera.keysUp.push(87);
-    camera.keysDown.push(13);
-    camera.keysLeft.push(18);
-    camera.keysRight.push(15);
-    camera.keysUpward.push(12);
-    const cameraCanvas = scene.getEngine().getRenderingCanvas(); //connect camera with engine and canvas and scene
-    camera.attachControl(cameraCanvas, true); // who control camera direction
-    camera.setTarget(new BABYLON.Vector3(2, 3.2, 3.3)); // camera should looks for
+    camera.keysUp.push(87); // W
+    camera.keysDown.push(83); // S
+    camera.keysLeft.push(65); // A
+    camera.keysRight.push(68); // D
+    camera.keysUpward.push(32); // Space
+    const cameraCanvas = scene.getEngine().getRenderingCanvas();
+    camera.attachControl(cameraCanvas, true);
+    camera.setTarget(new BABYLON.Vector3(2, 3.2, 3.3));
     scene.gravity.y = -0.08;
-    //camera border
-    const x = 14;
-    const y = -8;
-    const z = 14;
 
     function clampCameraPosition() {
       const cameraPosition = camera.position;
-      //take half space for x,y,z
-      const halfX = x / 2;
-      const halfY = y / 2;
-      const halfZ = z / 2;
+      const halfX = 14 / 2;
+      const halfY = -8 / 2;
+      const halfZ = 14 / 2;
       cameraPosition.x = Math.max(-halfX, Math.min(halfX, cameraPosition.x));
       cameraPosition.y = Math.max(-halfY, Math.min(halfY, cameraPosition.y));
       cameraPosition.z = Math.max(-halfZ, Math.min(halfZ, cameraPosition.z));
     }
-    scene.registerBeforeRender(() => {
-      clampCameraPosition();
-    });
+    scene.registerBeforeRender(clampCameraPosition);
+
+    new BABYLON.DeviceOrientationCamera(
+      "",
+      new BABYLON.Vector3(4, 4, 5.8),
+      scene
+    );
 
     const room = BABYLON.MeshBuilder.CreateBox(
       "",
@@ -274,6 +296,7 @@ export default function Home() {
     );
     planeTv.rotation = new BABYLON.Vector3(0, 3.15, 0);
     planeTv.position = new BABYLON.Vector3(-4.15, 1.05, -6.42);
+
     const planeMaterial = new BABYLON.StandardMaterial("");
     planeTv.material = planeMaterial;
     planeMaterial.backFaceCulling = false;
@@ -626,6 +649,14 @@ export default function Home() {
     });
 
     scene.collisionsEnabled = true;
+
+    const remoteControl = new BABYLON.TransformNode("", scene);
+    remoteControl.parent = imageFrame.meshes[0];
+    remoteControl.position = new BABYLON.Vector3(0.25, 0, 0);
+    remoteControl.rotation = new BABYLON.Vector3(0, 1.7, 0);
+    remoteControl.scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
+    camera.lockedTarget = remoteControl;
+
     return scene;
   };
 
