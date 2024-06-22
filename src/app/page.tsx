@@ -136,6 +136,51 @@ export default function Home() {
       clampCameraPosition();
     });
 
+    const buttonForward = document.getElementById("moveForwardButton");
+    if (buttonForward) {
+      buttonForward.addEventListener("click", () => {
+        camera.position.addInPlace(
+          camera.getDirection(BABYLON.Axis.Z).scale(0.1)
+        );
+        FreeCamera.position.addInPlace(
+          FreeCamera.getDirection(BABYLON.Axis.Z).scale(0.1)
+        );
+      });
+    }
+    const buttonBackward = document.getElementById("moveBackwardButton");
+    if (buttonBackward) {
+      buttonBackward.addEventListener("click", () => {
+        camera.position.subtractInPlace(
+          camera.getDirection(BABYLON.Axis.Z).scale(0.1)
+        );
+        FreeCamera.position.subtractInPlace(
+          FreeCamera.getDirection(BABYLON.Axis.Z).scale(0.1)
+        );
+      });
+    }
+    const buttonLeft = document.getElementById("moveLeftButton");
+    if (buttonLeft) {
+      buttonLeft.addEventListener("click", () => {
+        camera.position.subtractInPlace(
+          camera.getDirection(BABYLON.Axis.X).scale(0.1)
+        );
+        FreeCamera.position.subtractInPlace(
+          FreeCamera.getDirection(BABYLON.Axis.X).scale(0.1)
+        );
+      });
+    }
+    const buttonRight = document.getElementById("moveRightButton");
+    if (buttonRight) {
+      buttonRight.addEventListener("click", () => {
+        camera.position.addInPlace(
+          camera.getDirection(BABYLON.Axis.X).scale(0.1)
+        );
+        FreeCamera.position.addInPlace(
+          FreeCamera.getDirection(BABYLON.Axis.X).scale(0.1)
+        );
+      });
+    }
+
     const room = BABYLON.MeshBuilder.CreateBox(
       "",
       {
@@ -644,33 +689,49 @@ export default function Home() {
           ref={canvasRef}
           className="h-screen w-full outline-none relative"
         />
-        <div className="absolute bottom-3 flex left-3 lg:left-11 gap-4 items-end uppercase">
-          <div className="hidden lg:flex flex-col gap-1 items-center">
-            <div className="bg-[#83807F] text-[12px] text-white">
-              <IoMdArrowDropup />
-            </div>
-            <div className="flex gap-1">
-              <div className="bg-[#83807F] text-[12px] text-white">
-                <IoMdArrowDropleft />
-              </div>
-              <div className="bg-[#83807F] text-[12px] text-white">
-                <MdOutlineArrowDropDown />
-              </div>
-              <div className="bg-[#83807F] text-[12px] text-white">
-                <IoMdArrowDropright />
-              </div>
-            </div>
-            <p className="text-[8px] text-[#83807F]">camera controller</p>
-          </div>
+        <div className="absolute lg:bottom-3 bottom-12 flex left-3 lg:left-11 gap-4 items-end uppercase">
           <div className="flex flex-col gap-1 items-center">
-            <div className="text-[26px] text-slate-100 lg:text-[#83807F]">
+            <button
+              className="bg-[#83807F] lg:text-[18px] text-[14px] text-white"
+              id="moveForwardButton"
+            >
+              <IoMdArrowDropup />
+            </button>
+            <div className="flex gap-1">
+              <button
+                className="bg-[#83807F] lg:text-[18px] text-[14px] text-white"
+                id="moveLeftButton"
+              >
+                <IoMdArrowDropleft />
+              </button>
+              <button
+                className="bg-[#83807F] lg:text-[18px] text-[14px] text-white"
+                id="moveBackwardButton"
+              >
+                <MdOutlineArrowDropDown />
+              </button>
+              <button
+                id="moveRightButton"
+                className="bg-[#83807F] lg:text-[18px] text-[14px] text-white"
+              >
+                <IoMdArrowDropright />
+              </button>
+            </div>
+            {/* <p className="text-[8px] text-[#83807F]">camera controller</p> */}
+          </div>
+          {/* <div className="flex flex-col gap-1 items-center"> */}
+          {/* <div className="text-[26px] text-slate-100 lg:text-[#83807F]">
               <PiMouseSimpleFill className="hidden lg:flex" />
               <MdTouchApp className="lg:hidden" />
             </div>
             <p className="text-[8px] text-slate-100 lg:text-[#83807F]">
               drag camera
-            </p>
-          </div>
+            </p> */}
+          {/* <button id="moveForwardButton">Move Forward</button> */}
+          {/* <button id="moveBackwardButton">Move Backward</button> */}
+          {/* <button id="moveLeftButton">Move Left</button>
+            <button id="moveRightButton">Move Right</button> */}
+          {/* </div>. */}
         </div>
       </div>
     </div>
