@@ -114,11 +114,12 @@ export default function Home() {
     const y = -8;
     const z = 14;
 
-    new BABYLON.DeviceOrientationCamera(
+    const FreeCamera = new BABYLON.DeviceOrientationCamera(
       "",
       new BABYLON.Vector3(4, 4, 5.8),
       scene
     );
+    FreeCamera.attachControl(scene);
 
     function clampCameraPosition() {
       const cameraPosition = camera.position;
