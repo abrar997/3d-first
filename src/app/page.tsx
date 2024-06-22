@@ -61,6 +61,8 @@ export default function Home() {
   const sceneRef = useRef<BABYLON.Scene | null>(null); // action
   const engineRef = useRef<BABYLON.Engine | null>(null); //engine for action
 
+  const [isShown, setIsShown] = useState(false);
+
   useEffect(() => {
     async function renderSceneFunction() {
       if (canvasRef.current) {
@@ -685,49 +687,38 @@ export default function Home() {
     <div>
       <div className="relative h-screen">
         <canvas ref={canvasRef} className="h-full w-full outline-none" />
-        <div className="absolute lg:bottom-3 bottom-12 flex left-6 lg:left-11 gap-4 items-end uppercase">
+        <div className="absolute md:bottom-3 bottom-16 flex left-6 md:left-11 gap-4 items-end uppercase">
           <div className="flex flex-col gap-1 items-center">
             <button
-              className="bg-[#83807F] lg:text-xl border text-lg text-white"
+              className="bg-[#83807F] md:text-xl text-xl text-white"
               id="moveForwardButton"
             >
               <IoMdArrowDropup />
             </button>
             <div className="flex gap-1">
               <button
-                className="bg-[#83807F] lg:text-xl border text-lg text-white"
+                className="bg-[#83807F] md:text-xl text-xl text-white"
                 id="moveLeftButton"
               >
                 <IoMdArrowDropleft />
               </button>
               <button
-                className="bg-[#83807F] lg:text-xl border text-lg text-white"
+                className="bg-[#83807F] md:text-xl text-xl text-white"
                 id="moveBackwardButton"
               >
                 <MdOutlineArrowDropDown />
               </button>
               <button
                 id="moveRightButton"
-                className="bg-[#83807F] lg:text-xl border text-lg text-white"
+                className="bg-[#83807F] md:text-xl text-xl text-white"
               >
                 <IoMdArrowDropright />
               </button>
             </div>
-            <p className="text-[8px] text-[#83807F]">Click to move</p>
+            <p className="lg:text-[8px] text-[12px] text-[#83807F]">
+              Click to move
+            </p>
           </div>
-          {/* <div className="flex flex-col gap-1 items-center"> */}
-          {/* <div className="text-[26px] text-slate-100 lg:text-[#83807F]">
-              <PiMouseSimpleFill className="hidden lg:flex" />
-              <MdTouchApp className="lg:hidden" />
-            </div>
-            <p className="text-[8px] text-slate-100 lg:text-[#83807F]">
-              drag camera
-            </p> */}
-          {/* <button id="moveForwardButton">Move Forward</button> */}
-          {/* <button id="moveBackwardButton">Move Backward</button> */}
-          {/* <button id="moveLeftButton">Move Left</button>
-            <button id="moveRightButton">Move Right</button> */}
-          {/* </div>. */}
         </div>
       </div>
     </div>
