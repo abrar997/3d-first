@@ -1,12 +1,17 @@
+"use client";
+import { useState, useEffect } from "react";
 import Canvas from "@/components/Canvas";
+import Loading from "./loading";
+function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
 
-const Home = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-  return (
-    <div>
-      <Canvas />
-    </div>
-  );
-};
+    return () => clearTimeout(timer);
+  }, []);
+  return <div>{isLoading ? <Loading /> : <Canvas />}</div>;
+}
 
 export default Home;
