@@ -8,7 +8,6 @@ import {
   IoMdArrowDropup,
 } from "react-icons/io";
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import { TfiHandDrag } from "react-icons/tfi";
 
 const gallery = [
   {

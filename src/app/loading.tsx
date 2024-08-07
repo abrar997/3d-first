@@ -4,7 +4,7 @@ const Loading = () => {
   return (
     <div
       role="status"
-      className="flex items-center justify-center lg:h-[90vh] h-[80vh]"
+      className="flex flex-col gap-5 items-center justify-center lg:h-[90vh] h-[80vh]"
     >
       <svg
         aria-hidden="true"
@@ -22,7 +22,7 @@ const Loading = () => {
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <p>please wait a few seconds</p>
     </div>
   );
 };

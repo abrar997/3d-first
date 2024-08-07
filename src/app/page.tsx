@@ -1,17 +1,14 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import Canvas from "@/components/Canvas";
 import Loading from "./loading";
-function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 10000);
 
-    return () => clearTimeout(timer);
-  }, []);
-  return <div>{isLoading ? <Loading /> : <Canvas />}</div>;
+const Canvas = dynamic(() => import("../components/Canvas"), { ssr: false });
+
+function Home() {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => setLoading(true));
+  return <div>{loading ? <Loading /> : <Canvas />}</div>;
 }
 
 export default Home;
